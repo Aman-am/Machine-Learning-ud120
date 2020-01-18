@@ -32,14 +32,3 @@ print(acc)
 # Number of features : 3785
 # reduced to 379 after changing percentile in preprocess from 10 to 1
 # accuracy changed to 0.967 after changing percentile
-
-
-#########################################################
-### your code goes here ###
-
-
-
-
-#########################################################
-
-
