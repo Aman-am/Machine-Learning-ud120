@@ -31,11 +31,32 @@ plt.show()
 ### your code here!  name your classifier object clf if you want the 
 ### visualization code (prettyPicture) to show you the decision boundary
 
+# kmeans
+from sklearn.neighbors.nearest_centroid import NearestCentroid
+clf = NearestCentroid()
+clf.fit(features_train,labels_train) 
+predict=clf.predict(features_test)
+acc = clf.score(features_test,labels_test)
+print(acc)
+# # 0.908
 
+# AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier
+clf = AdaBoostClassifier(n_estimators=100, random_state=0)
+clf.fit(features_train,labels_train)
+clf.predict(features_test)
+acc = clf.score(features_test,labels_test)
+print(acc)
+# 0.924
 
-
-
-
+# RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier(max_depth=2, random_state=0)
+clf.fit(features_train,labels_train)
+clf.predict(features_test)
+acc = clf.score(features_test,labels_test)
+print(acc)
+# 0.92
 
 
 try:
