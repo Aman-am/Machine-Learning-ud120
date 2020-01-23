@@ -14,8 +14,33 @@ import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 
+def Rescale(data_dict):
+    # Feature Scaling
+    from sklearn import preprocessing
+    import numpy as np
 
+    stocks = []
+    salary = []
+    for d in data_dict.values():
+        if d["salary"] != 'NaN':
+            salary.append(int(d["salary"]))
+        if d["exercised_stock_options"] != 'NaN':
+            stocks.append(int(d["exercised_stock_options"]))
+        
+    salary = [min(salary),200000.0,max(salary)]
+    stocks = [min(stocks),1000000.0,max(stocks)]
 
+    salary = numpy.array([[e] for e in salary])
+    stocks = numpy.array([[e] for e in stocks])
+
+    scaler_salary = preprocessing.MinMaxScaler()
+    scaler_stok = preprocessing.MinMaxScaler()
+
+    rescaled_salary = scaler_salary.fit_transform(salary)
+    rescaled_stock = scaler_salary.fit_transform(stocks)
+
+    print (rescaled_salary)
+    print (rescaled_stock)
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
     """ some plotting code designed to help you visualize your clusters """
@@ -43,21 +68,15 @@ data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "rb"
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
 
-stocks = []
-for d in data_dict.values():
-    if d["salary"] != 'NaN':
-        stocks.append(int(d["salary"]))
-    # print(v["exercised_stock_options"])
-stocks.sort(reverse = True) 
-# print (stocks)
+Rescale(data_dict)
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
-feature_3 = "total_payments"
+# feature_3 = "total_payments"
 poi  = "poi"
-features_list = [poi, feature_1, feature_2, feature_3]
+features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
@@ -69,7 +88,7 @@ pred = kmeans.predict(finance_features)
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
-for f1, f2, f3 in finance_features:
+for f1, f2 in finance_features:
     plt.scatter( f1, f2 )
 plt.show()
 
