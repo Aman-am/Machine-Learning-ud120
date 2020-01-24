@@ -14,8 +14,33 @@ import sys
 sys.path.append("../tools/")
 from feature_format import featureFormat, targetFeatureSplit
 
+def Rescale(data_dict):
+    # Feature Scaling
+    from sklearn import preprocessing
+    import numpy as np
 
+    stocks = []
+    salary = []
+    for d in data_dict.values():
+        if d["salary"] != 'NaN':
+            salary.append(int(d["salary"]))
+        if d["exercised_stock_options"] != 'NaN':
+            stocks.append(int(d["exercised_stock_options"]))
+        
+    salary = [min(salary),200000.0,max(salary)]
+    stocks = [min(stocks),1000000.0,max(stocks)]
 
+    salary = numpy.array([[e] for e in salary])
+    stocks = numpy.array([[e] for e in stocks])
+
+    scaler_salary = preprocessing.MinMaxScaler()
+    scaler_stok = preprocessing.MinMaxScaler()
+
+    rescaled_salary = scaler_salary.fit_transform(salary)
+    rescaled_stock = scaler_salary.fit_transform(stocks)
+
+    print (rescaled_salary)
+    print (rescaled_stock)
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
     """ some plotting code designed to help you visualize your clusters """
@@ -39,21 +64,26 @@ def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature
 
 
 ### load in the dict of dicts containing all the data on each person in the dataset
-data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r") )
+data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "rb") )
 ### there's an outlier--remove it! 
 data_dict.pop("TOTAL", 0)
 
+Rescale(data_dict)
 
 ### the input features we want to use 
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+# feature_3 = "total_payments"
 poi  = "poi"
 features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=2, random_state=0).fit(finance_features)
 
+pred = kmeans.predict(finance_features)
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
@@ -73,4 +103,4 @@ plt.show()
 try:
     Draw(pred, finance_features, poi, mark_poi=False, name="clusters.pdf", f1_name=feature_1, f2_name=feature_2)
 except NameError:
-    print "no predictions object named pred found, no clusters to plot"
+    print ("no predictions object named pred found, no clusters to plot")
