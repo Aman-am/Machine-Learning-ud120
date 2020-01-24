@@ -19,6 +19,7 @@ import pickle
 
 enron_data = pickle.load(open("../final_project/final_project_dataset.pkl", "rb"))
 
+<<<<<<< Updated upstream
 len(enron_data)
 len(enron_data.keys())
 
@@ -65,3 +66,22 @@ for user in enron_data:
         # print(enron_data[user]['salary'])
         count+=1
 print count
+=======
+# This gives no. of people in the dataset i.e 146
+# print(len(enron_data))
+
+# This gives no. of features for an individual in the dataset i.e 21
+# print(len(enron_data['SKILLING JEFFREY K']))
+
+
+# This is to count no. of people with poi = True
+# ctr =0
+# for (k,v) in enron_data.items():
+#     if v['poi']:
+#         ctr +=1
+
+# print(ctr)
+
+poi_names = open("../final_project/poi_names.txt", "r")
+print(len(poi_names.readlines()))
+>>>>>>> Stashed changes
