@@ -50,7 +50,7 @@ def featureFormat( dictionary, features, remove_NaN=True, remove_all_zeroes=True
 
 
     return_list = []
-
+    sort_keys = '../tools/python2_lesson14_keys.pkl'
     # Key order - first branch is for Python 3 compatibility on mini-projects,
     # second branch is for compatibility on final project.
     if isinstance(sort_keys, str):

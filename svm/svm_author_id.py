@@ -42,7 +42,7 @@ print(accuracy)
 # print( "10th", y_pred[10])
 # print( "26th", y_pred[26])
 # print( "50th", y_pred[50])
-print("Chris:", sum(y_pred))
+# print("Chris:", sum(y_pred))
 
 #########################################################
 
